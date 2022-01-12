@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     context = {
         'age': get_age_of_winemaker(),
-        'wine_cards': read_excel(args.path)
+        'products': read_excel(args.path)
     }
     
     rendered_page = template.render(context)

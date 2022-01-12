@@ -113,22 +113,27 @@
             </p>
           </div>
         </div>
-        <div class="row">
-          {% for wine_card in wine_cards %}
-            <div class="col-lg-4 mb-5 col-md-6">
-              <div class="wine_v_1 text-center pb-4 pt-5">
-                <img src="images/{{ wine_card.Картинка }}" alt="Image" class="img-fluid">
-                <div>
-                  <h3 class="heading mt-3 mb-3 text-dark">{{ wine_card.Название }}</h3>
-                  <p>
-                    Сорт винограда - {{ wine_card.Сорт }}<br/>
-                    <span class="price">{{ wine_card.Цена | int }} р.</span>
-                  </p>
+        {% for category, product_cards in products.items() %}
+          <div class="col-12 section-title text-center">
+            <h2 class="d-block">{{ category }}</h2>
+            <div class="row">
+              {% for product_card in product_cards %}
+                <div class="col-lg-4 mb-5 col-md-6">
+                  <div class="wine_v_1 text-center pb-4 pt-5">
+                    <img src="images/{{ product_card.Картинка }}" alt="Image" class="img-fluid">
+                    <div>
+                      <h3 class="heading mt-3 mb-3 text-dark">{{ product_card.Название }}</h3>
+                      <p>
+                        Сорт винограда - {{ product_card.Сорт }}<br/>
+                        <span class="price">{{ product_card.Цена | int }} р.</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              {% endfor %}
             </div>
-          {% endfor %}
-        </div>
+          </div>
+        {% endfor %}
       </div>
     </div>
 
