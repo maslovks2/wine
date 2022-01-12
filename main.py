@@ -1,5 +1,6 @@
 import argparse
 import datetime
+from collections import defaultdict
 
 import pandas as pd
 
@@ -21,11 +22,11 @@ def get_age_of_winemaker():
 
 def read_excel(path):
     wines_data = pd.read_excel(path).fillna('').to_dict(orient='records')
-    new_format = {}
+    new_format = defaultdict(list)
 
     for wine_data in wines_data:
         category = wine_data.pop('Категория')
-        new_format.setdefault(category, []).append(wine_data)
+        new_format[category].append(wine_data)
     return new_format
 
 
