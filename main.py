@@ -20,7 +20,13 @@ def get_age_of_winemaker():
     return f'{age_in_years} {years_word}'
 
 def read_excel(path):
-    return pd.read_excel(path).to_dict(orient='records')
+    wines_data = pd.read_excel(path).fillna('').to_dict(orient='records')
+    new_format = {}
+
+    for wine_data in wines_data:
+        category = wine_data.pop('Категория')
+        new_format.setdefault(category, []).append(wine_data)
+    return new_format
 
 
 if __name__ == '__main__':
