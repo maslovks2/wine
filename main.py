@@ -1,14 +1,12 @@
+import argparse
 import datetime
+
+import pandas as pd
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-env = Environment(
-    loader=FileSystemLoader('.'),
-    autoescape=select_autoescape(['html'])
-)
-template = env.get_template('template.html')
 
 def get_age_of_winemaker():
     foundation_year = 1920
@@ -21,14 +19,30 @@ def get_age_of_winemaker():
         years_word = 'лет'
     return f'{age_in_years} {years_word}'
 
-context = {
-    'age': get_age_of_winemaker()
-}
+def read_excel(path):
+    return pd.read_excel(path).to_dict(orient='records')
 
-rendered_page = template.render(context)
 
-with open('index.html', 'w', encoding="utf8") as file:
-    file.write(rendered_page)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='run wine site')
+    parser.add_argument('--path', '-p', help='path to excel file', required=True)
+    args = parser.parse_args()
 
-server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-server.serve_forever()
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html'])
+    )
+    template = env.get_template('template.html')
+
+    context = {
+        'age': get_age_of_winemaker(),
+        'wine_cards': read_excel(args.path)
+    }
+    
+    rendered_page = template.render(context)
+
+    with open('index.html', 'w', encoding="utf8") as file:
+        file.write(rendered_page)
+
+    server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
+    server.serve_forever()

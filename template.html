@@ -114,15 +114,15 @@
           </div>
         </div>
         <div class="row">
-          {% for i in range(6) %}
+          {% for wine_card in wine_cards %}
             <div class="col-lg-4 mb-5 col-md-6">
               <div class="wine_v_1 text-center pb-4 pt-5">
-                <img src="images/izabella.png" alt="Image" class="img-fluid">
+                <img src="images/{{ wine_card.Картинка }}" alt="Image" class="img-fluid">
                 <div>
-                  <h3 class="heading mt-3 mb-3 text-dark">Изабелла</h3>
+                  <h3 class="heading mt-3 mb-3 text-dark">{{ wine_card.Название }}</h3>
                   <p>
-                    Сорт винограда - Изабелла<br/>
-                    <span class="price">350 р.</span>
+                    Сорт винограда - {{ wine_card.Сорт }}<br/>
+                    <span class="price">{{ wine_card.Цена | int }} р.</span>
                   </p>
                 </div>
               </div>
