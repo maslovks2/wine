@@ -1,11 +1,11 @@
 import argparse
 import datetime
-from collections import defaultdict
 
 import pandas as pd
 
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from collections import defaultdict
 
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
@@ -20,26 +20,39 @@ def get_age_of_winemaker():
         years_word = 'лет'
     return f'{age_in_years} {years_word}'
 
+
 def read_excel(path):
-    wines_data = pd.read_excel(path).fillna('').to_dict(orient='records')
+    products = (
+        pd.read_excel(path)
+        .sort_values(['Категория', 'Название'])
+        .fillna('')
+        .to_dict(orient='records')
+    )
     new_format = defaultdict(list)
 
-    for wine_data in wines_data:
-        category = wine_data.pop('Категория')
-        new_format[category].append(wine_data)
+    for product in products:
+        category = product.pop('Категория')
+        new_format[category].append(product)
     return new_format
 
 
-if __name__ == '__main__':
+def parse_args():
     parser = argparse.ArgumentParser(description='run wine site')
     parser.add_argument('--path', '-p', help='path to excel file', required=True)
-    args = parser.parse_args()
+    return parser.parse_args()
 
+
+def get_template(templates_path='.', template_name='template.html'):
     env = Environment(
-        loader=FileSystemLoader('.'),
+        loader=FileSystemLoader(templates_path),
         autoescape=select_autoescape(['html'])
     )
-    template = env.get_template('template.html')
+    return env.get_template(template_name)
+
+
+if __name__ == '__main__':
+    args = parse_args()
+    template = get_template()
 
     context = {
         'age': get_age_of_winemaker(),

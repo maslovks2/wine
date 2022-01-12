@@ -121,10 +121,15 @@
                 <div class="col-lg-4 mb-5 col-md-6">
                   <div class="wine_v_1 text-center pb-4 pt-5">
                     <img src="images/{{ product_card.Картинка }}" alt="Image" class="img-fluid">
+                    {% if product_card.Акция == "Выгодное предложение" %}
+                      <img src="assets/profitable.png" style="width:10rem;height: 10rem;position:absolute;right: -20px;top: -20px;">
+                    {% endif %}
                     <div>
                       <h3 class="heading mt-3 mb-3 text-dark">{{ product_card.Название }}</h3>
                       <p>
-                        Сорт винограда - {{ product_card.Сорт }}<br/>
+                        {% if product_card.Сорт %}
+                          Сорт винограда - {{ product_card.Сорт }}<br/>
+                        {% endif %}
                         <span class="price">{{ product_card.Цена | int }} р.</span>
                       </p>
                     </div>
