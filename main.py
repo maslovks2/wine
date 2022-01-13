@@ -21,19 +21,19 @@ def get_age_of_winemaker():
     return f'{age_in_years} {years_word}'
 
 
-def read_excel(path):
+def get_products(path):
     products = (
         pd.read_excel(path)
         .sort_values(['Категория', 'Название'])
         .fillna('')
         .to_dict(orient='records')
     )
-    new_format = defaultdict(list)
+    grouped_products = defaultdict(list)
 
     for product in products:
         category = product.pop('Категория')
-        new_format[category].append(product)
-    return new_format
+        grouped_products[category].append(product)
+    return grouped_products
 
 
 def parse_args():
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     context = {
         'age': get_age_of_winemaker(),
-        'products': read_excel(args.path)
+        'products': get_products(args.path)
     }
     
     rendered_page = template.render(context)
